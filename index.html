@@ -3,206 +3,76 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A-Z Inventory and Feeder V1</title>
+<title>A-Z Master Pipeline Homepage</title>
 <style>
-  :root{--bg:#0f172a;--panel:#111827;--panel2:#1f2937;--text:#f8fafc;--muted:#cbd5e1;--line:#334155;--good:#22c55e;--warn:#f59e0b;--bad:#ef4444;--blue:#38bdf8;}
-  *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
-  header{padding:22px 16px;border-bottom:1px solid var(--line);background:#020617;position:sticky;top:0;z-index:5}
-  h1{margin:0 0 8px;font-size:24px} h2{font-size:18px;margin:0 0 10px}.wrap{max-width:1100px;margin:0 auto;padding:16px}.grid{display:grid;grid-template-columns:1fr;gap:14px}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 8px 28px rgba(0,0,0,.25)}
-  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.btn{appearance:none;border:0;border-radius:12px;padding:12px 14px;background:var(--blue);color:#00111a;font-weight:800;font-size:15px;cursor:pointer}
-  .btn.secondary{background:#e5e7eb;color:#111827}.btn.good{background:var(--good);color:#03150a}.btn.warn{background:var(--warn);color:#1f1300}.btn.bad{background:var(--bad);color:#fff}
-  input[type=file]{width:100%;padding:16px;border:2px dashed var(--line);border-radius:12px;background:var(--panel2);color:var(--muted)}
-  textarea{width:100%;min-height:170px;border-radius:12px;border:1px solid var(--line);background:#020617;color:var(--text);padding:12px;font-size:14px}
-  .small{color:var(--muted);font-size:13px}.stat{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px;min-width:130px}.stat b{display:block;font-size:22px}
-  table{width:100%;border-collapse:collapse;font-size:14px}td,th{border-bottom:1px solid var(--line);padding:8px;text-align:left} code{background:#020617;padding:2px 6px;border-radius:8px;color:#bfdbfe}
-  .letters{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:8px}.letter{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center}.letter b{font-size:20px;display:block}
+  :root{--bg:#070b18;--panel:#101827;--panel2:#172033;--text:#f8fafc;--muted:#cbd5e1;--line:#334155;--gold:#fbbf24;--blue:#38bdf8;--green:#22c55e;--purple:#a78bfa;--red:#ef4444;--orange:#fb923c}
+  *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:radial-gradient(circle at top,#1e293b 0,#070b18 55%);color:var(--text);line-height:1.45}
+  header{padding:28px 16px;border-bottom:1px solid var(--line);background:rgba(2,6,23,.88);position:sticky;top:0;z-index:5;backdrop-filter:blur(10px)}
+  .wrap{max-width:1150px;margin:0 auto;padding:16px}.grid{display:grid;grid-template-columns:1fr;gap:14px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  h1{margin:0 0 8px;font-size:28px} h2{font-size:20px;margin:0 0 10px}.small{color:var(--muted);font-size:14px}.tiny{color:var(--muted);font-size:12px}
+  .card{background:rgba(16,24,39,.94);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 10px 34px rgba(0,0,0,.28)}
+  .app{display:flex;flex-direction:column;gap:10px;min-height:190px}.app h3{margin:0;font-size:18px}.app p{margin:0;color:var(--muted);font-size:14px}.tag{display:inline-block;width:max-content;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:#e2e8f0;font-size:12px;background:#020617}
+  a.btn,button.btn{appearance:none;text-decoration:none;text-align:center;border:0;border-radius:14px;padding:13px 14px;background:var(--blue);color:#00111a;font-weight:900;font-size:15px;cursor:pointer;display:inline-block}
+  a.btn.gold{background:var(--gold);color:#1f1300} a.btn.green,button.green{background:var(--green);color:#03150a} a.btn.purple{background:var(--purple);color:#180326} a.btn.orange{background:var(--orange);color:#1f0b00} a.btn.red{background:var(--red);color:#fff}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  input[type=file]{width:100%;padding:16px;border:2px dashed var(--line);border-radius:12px;background:var(--panel2);color:var(--muted)} textarea{width:100%;min-height:170px;border-radius:12px;border:1px solid var(--line);background:#020617;color:var(--text);padding:12px;font-size:14px}
+  .stat{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px;min-width:130px}.stat b{display:block;font-size:22px}.letters{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:8px}.letter{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center}.letter b{font-size:20px;display:block}
+  table{width:100%;border-collapse:collapse;font-size:14px}td,th{border-bottom:1px solid var(--line);padding:8px;text-align:left} code{background:#020617;padding:2px 6px;border-radius:8px;color:#bfdbfe}.divider{height:1px;background:var(--line);margin:8px 0 2px}
 </style>
 </head>
 <body>
 <header>
-  <h1>🧭 A-Z Inventory and Feeder V1</h1>
-  <div class="small">iPad-safe local browser tool. Loads text files, cleans lines, dedupes, sorts A-Z, builds master output, and creates process logs. No server. No install.</div>
+  <div class="wrap">
+    <h1>🧭 A-Z Master Pipeline Homepage</h1>
+    <div class="small">Big-button launcher for your wonder machines. Open the app directly, then run the file pipeline without digging through GitHub.</div>
+  </div>
 </header>
 <main class="wrap grid">
+  <section class="card">
+    <h2>🚀 Open The Machines</h2>
+    <p class="small">Use these like homepage shortcuts. If a button says 404, that repo still needs GitHub Pages enabled in Settings → Pages.</p>
+    <div class="cards">
+      <div class="card app"><span class="tag">START HERE</span><h3>Inventory + Feeder</h3><p>Main safe intake: inventory, clean, dedupe, A-Z sort, export logs.</p><a class="btn gold" href="https://vishnuhorus-commits.github.io/A_Z_INVENTORY_AND_FEEDER_V1/" target="_blank">OPEN APP</a></div>
+      <div class="card app"><span class="tag">PROVEN CLEANER</span><h3>Stable AZ Index Sorter</h3><p>The strong cleaner/sorter for already gathered A-Z text.</p><a class="btn green" href="https://vishnuhorus-commits.github.io/stable-az-index-sorter/" target="_blank">OPEN APP</a></div>
+      <div class="card app"><span class="tag">AUTO CHUNK</span><h3>AZ Clean Auto Chunk Sorter</h3><p>For large files that need chunking, cleaning, and A-Z sorting.</p><a class="btn" href="https://vishnuhorus-commits.github.io/az-clean-auto-chunk-sorter/" target="_blank">OPEN APP</a></div>
+      <div class="card app"><span class="tag">HEAVY DUTY</span><h3>Ultra Chunk Sorter</h3><p>For monster text dumps and overloaded source files.</p><a class="btn orange" href="https://vishnuhorus-commits.github.io/auto-chunk-engine-ultra-sorter/" target="_blank">OPEN APP</a></div>
+      <div class="card app"><span class="tag">QUICK CLEAN</span><h3>AZ Clean</h3><p>Fast basic cleaning when you do not need the full pipeline.</p><a class="btn" href="https://vishnuhorus-commits.github.io/az-clean/" target="_blank">OPEN APP</a></div>
+      <div class="card app"><span class="tag">MASTER ARCHIVE</span><h3>Master Index</h3><p>Final catalog and master archive command point.</p><a class="btn purple" href="https://vishnuhorus-commits.github.io/Master-index/" target="_blank">OPEN APP</a></div>
+      <div class="card app"><span class="tag">WRITING</span><h3>RhymeWeave</h3><p>Rhyme, alliteration, word-weaving, writing expansion.</p><a class="btn purple" href="https://vishnuhorus-commits.github.io/rhymeweave/" target="_blank">OPEN APP</a></div>
+      <div class="card app"><span class="tag">SOUND DATA</span><h3>Phon</h3><p>Pronunciation and phoneme research base for rhyme logic.</p><a class="btn" href="https://vishnuhorus-commits.github.io/phon/" target="_blank">OPEN APP</a></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>✅ Simple Route</h2>
+    <p class="small"><b>Collect → Sort → Index → Run.</b> Do not delete originals. Do not process everything at once. One folder or subfolder equals one batch.</p>
+  </section>
+
   <section class="card">
     <h2>1) Drop Raw Files Here</h2>
     <input id="files" type="file" multiple accept=".txt,.md,.csv,.json,.html,.htm,.rtf,text/*">
     <p class="small">Select raw text files from iCloud Drive, Files app, Downloads, USB, Dropbox export, or Google Drive download. This does not modify originals.</p>
-    <div class="row">
-      <button class="btn good" onclick="runMachine()">RUN CLEAN + A-Z SORT</button>
-      <button class="btn secondary" onclick="clearAll()">CLEAR</button>
-    </div>
+    <div class="row"><button class="btn green" onclick="runMachine()">RUN CLEAN + A-Z SORT</button><button class="btn" onclick="clearAll()">CLEAR</button></div>
   </section>
-
-  <section class="card">
-    <h2>2) Optional Paste Box</h2>
-    <textarea id="pasteBox" placeholder="Optional: paste raw alliteration text here, then press RUN."></textarea>
-  </section>
-
-  <section class="card">
-    <h2>3) Stats</h2>
-    <div class="row">
-      <div class="stat"><span>Source files</span><b id="sFiles">0</b></div>
-      <div class="stat"><span>Raw lines</span><b id="sRaw">0</b></div>
-      <div class="stat"><span>Kept</span><b id="sKept">0</b></div>
-      <div class="stat"><span>Duplicates</span><b id="sDup">0</b></div>
-      <div class="stat"><span>Review</span><b id="sReview">0</b></div>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2>4) Export Files</h2>
-    <div class="row">
-      <button class="btn" onclick="downloadMaster()">Download MASTER_AZ_INDEX.txt</button>
-      <button class="btn" onclick="downloadZiplessLetters()">Download A-Z Letter Files One By One</button>
-      <button class="btn warn" onclick="downloadReview()">Download REVIEW_NOT_DELETED.txt</button>
-      <button class="btn secondary" onclick="downloadLog()">Download PROCESS_LOG.txt</button>
-      <button class="btn secondary" onclick="downloadInventory()">Download SOURCE_INVENTORY.txt</button>
-    </div>
-    <p class="small">iPad note: if multiple downloads are annoying, start with <code>MASTER_AZ_INDEX.txt</code>, <code>PROCESS_LOG.txt</code>, and <code>REVIEW_NOT_DELETED.txt</code>.</p>
-  </section>
-
-  <section class="card">
-    <h2>5) A-Z Counts</h2>
-    <div id="letterCounts" class="letters"></div>
-  </section>
-
-  <section class="card">
-    <h2>6) Master Preview</h2>
-    <textarea id="preview" readonly></textarea>
-  </section>
-
-  <section class="card">
-    <h2>7) Source Inventory</h2>
-    <table>
-      <thead><tr><th>File</th><th>Size</th><th>Status</th><th>Notes</th></tr></thead>
-      <tbody id="inventoryTable"></tbody>
-    </table>
-  </section>
+  <section class="card"><h2>2) Optional Paste Box</h2><textarea id="pasteBox" placeholder="Optional: paste raw alliteration text here, then press RUN."></textarea></section>
+  <section class="card"><h2>3) Stats</h2><div class="row"><div class="stat"><span>Source files</span><b id="sFiles">0</b></div><div class="stat"><span>Raw lines</span><b id="sRaw">0</b></div><div class="stat"><span>Kept</span><b id="sKept">0</b></div><div class="stat"><span>Duplicates</span><b id="sDup">0</b></div><div class="stat"><span>Review</span><b id="sReview">0</b></div></div></section>
+  <section class="card"><h2>4) Export Files</h2><div class="row"><button class="btn" onclick="downloadMaster()">Download MASTER_AZ_INDEX.txt</button><button class="btn" onclick="downloadZiplessLetters()">Download A-Z Letter Files One By One</button><button class="btn" onclick="downloadReview()">Download REVIEW_NOT_DELETED.txt</button><button class="btn" onclick="downloadLog()">Download PROCESS_LOG.txt</button><button class="btn" onclick="downloadInventory()">Download SOURCE_INVENTORY.txt</button></div><p class="small">iPad note: start with <code>MASTER_AZ_INDEX.txt</code>, <code>PROCESS_LOG.txt</code>, and <code>REVIEW_NOT_DELETED.txt</code>.</p></section>
+  <section class="card"><h2>5) A-Z Counts</h2><div id="letterCounts" class="letters"></div></section>
+  <section class="card"><h2>6) Master Preview</h2><textarea id="preview" readonly></textarea></section>
+  <section class="card"><h2>7) Source Inventory</h2><table><thead><tr><th>File</th><th>Size</th><th>Status</th><th>Notes</th></tr></thead><tbody id="inventoryTable"></tbody></table></section>
 </main>
 <script>
-const AZ = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-let state = {files:[], rawLines:0, kept:[], dup:[], review:[], buckets:{}, log:'', inventory:[]};
-AZ.forEach(l=>state.buckets[l]=[]);
-function cleanLine(line){
-  let original = String(line || '').replace(/\u0000/g,'').trim();
-  let cleaned = original.normalize('NFKC').replace(/[“”]/g,'"').replace(/[‘’]/g,"'");
-  cleaned = cleaned.replace(/<[^>]*>/g,' ');
-  cleaned = cleaned.replace(/https?:\/\/\S+/gi,' ');
-  cleaned = cleaned.replace(/[^A-Za-z\s'\-]/g,' ');
-  cleaned = cleaned.replace(/[-']/g,' ');
-  cleaned = cleaned.replace(/\s+/g,' ').trim().toUpperCase();
-  return {original, cleaned};
-}
-function reasonForReview(original, cleaned){
-  if(!original.trim()) return 'blank';
-  if(!cleaned) return 'no letters after cleaning';
-  if(cleaned.split(/\s+/).length < 2) return 'one word only';
-  let letters = (original.match(/[A-Za-z]/g)||[]).length;
-  let symbols = (original.match(/[^A-Za-z\s]/g)||[]).length;
-  if(letters && symbols / Math.max(1, original.length) > 0.45) return 'heavy symbol/code line';
-  return '';
-}
-async function runMachine(){
-  state = {files:[], rawLines:0, kept:[], dup:[], review:[], buckets:{}, log:'', inventory:[]}; AZ.forEach(l=>state.buckets[l]=[]);
-  const fileInput = document.getElementById('files');
-  const files = Array.from(fileInput.files || []);
-  const paste = document.getElementById('pasteBox').value || '';
-  const seen = new Set();
-  const started = new Date();
-  state.files = files.map(f=>f.name);
-  for(const file of files){
-    try{
-      const text = await file.text();
-      processText(text, file.name, seen);
-      state.inventory.push({name:file.name,size:file.size,status:'PROCESSED',notes:'Loaded through browser file picker'});
-    }catch(e){
-      state.inventory.push({name:file.name,size:file.size,status:'ERROR',notes:String(e.message||e)});
-    }
-  }
-  if(paste.trim()){
-    processText(paste, 'PASTE_BOX_INPUT', seen);
-    state.inventory.push({name:'PASTE_BOX_INPUT',size:paste.length,status:'PROCESSED',notes:'Manual pasted text'});
-  }
-  AZ.forEach(l=>state.buckets[l].sort());
-  state.kept = AZ.flatMap(l=>state.buckets[l]);
-  state.log = buildLog(started);
-  render();
-}
-function processText(text, sourceName, seen){
-  const lines = String(text||'').split(/\r?\n/);
-  state.rawLines += lines.length;
-  for(let i=0;i<lines.length;i++){
-    const {original, cleaned} = cleanLine(lines[i]);
-    const reviewReason = reasonForReview(original, cleaned);
-    if(reviewReason){ state.review.push(`${sourceName}\tLINE ${i+1}\t${reviewReason}\t${original}`); continue; }
-    if(seen.has(cleaned)){ state.dup.push(`${sourceName}\tLINE ${i+1}\tDUPLICATE\t${cleaned}`); continue; }
-    seen.add(cleaned);
-    const first = cleaned[0];
-    if(!AZ.includes(first)){ state.review.push(`${sourceName}\tLINE ${i+1}\tnon A-Z start\t${original}`); continue; }
-    state.buckets[first].push(cleaned);
-  }
-}
-function buildMaster(){
-  let out = [];
-  AZ.forEach(l=>{ out.push(`===== ${l} =====`); out.push(...state.buckets[l]); out.push(''); });
-  return out.join('\n');
-}
-function buildLog(started){
-  const ended = new Date();
-  return [
-    'A_Z_INVENTORY_AND_FEEDER_V1 PROCESS LOG',
-    `Started: ${started.toISOString()}`,
-    `Ended: ${ended.toISOString()}`,
-    `Source files: ${state.files.length}`,
-    `Raw lines: ${state.rawLines}`,
-    `Kept unique lines: ${state.kept.length}`,
-    `Duplicate lines: ${state.dup.length}`,
-    `Review not deleted lines: ${state.review.length}`,
-    '',
-    'RULES:',
-    '- Uppercase output',
-    '- Trim extra spaces',
-    '- Keep letters/spaces only in clean output',
-    '- Minimum two words',
-    '- Exact dedupe only',
-    '- Uncertain lines go to REVIEW_NOT_DELETED, not deletion',
-    '',
-    'FILES:',
-    ...state.inventory.map(x=>`${x.name}\t${x.size}\t${x.status}\t${x.notes}`)
-  ].join('\n');
-}
-function buildInventory(){
-  return ['SOURCE_INVENTORY_UNVERIFIED','FILE\tSIZE\tSTATUS\tNOTES',...state.inventory.map(x=>`${x.name}\t${x.size}\t${x.status}\t${x.notes}`)].join('\n');
-}
-function render(){
-  document.getElementById('sFiles').textContent = state.files.length;
-  document.getElementById('sRaw').textContent = state.rawLines;
-  document.getElementById('sKept').textContent = state.kept.length;
-  document.getElementById('sDup').textContent = state.dup.length;
-  document.getElementById('sReview').textContent = state.review.length;
-  document.getElementById('preview').value = buildMaster().slice(0,50000);
-  document.getElementById('letterCounts').innerHTML = AZ.map(l=>`<div class="letter"><b>${l}</b>${state.buckets[l].length}</div>`).join('');
-  document.getElementById('inventoryTable').innerHTML = state.inventory.map(x=>`<tr><td>${escapeHtml(x.name)}</td><td>${x.size}</td><td>${x.status}</td><td>${escapeHtml(x.notes)}</td></tr>`).join('');
-}
+const AZ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');let state={files:[],rawLines:0,kept:[],dup:[],review:[],buckets:{},log:'',inventory:[]};AZ.forEach(l=>state.buckets[l]=[]);
+function cleanLine(line){let original=String(line||'').replace(/\u0000/g,'').trim();let cleaned=original.normalize('NFKC').replace(/[“”]/g,'"').replace(/[‘’]/g,"'");cleaned=cleaned.replace(/<[^>]*>/g,' ').replace(/https?:\/\/\S+/gi,' ').replace(/[^A-Za-z\s'\-]/g,' ').replace(/[-']/g,' ').replace(/\s+/g,' ').trim().toUpperCase();return{original,cleaned};}
+function reasonForReview(original,cleaned){if(!original.trim())return'blank';if(!cleaned)return'no letters after cleaning';if(cleaned.split(/\s+/).length<2)return'one word only';let letters=(original.match(/[A-Za-z]/g)||[]).length;let symbols=(original.match(/[^A-Za-z\s]/g)||[]).length;if(letters&&symbols/Math.max(1,original.length)>0.45)return'heavy symbol/code line';return'';}
+async function runMachine(){state={files:[],rawLines:0,kept:[],dup:[],review:[],buckets:{},log:'',inventory:[]};AZ.forEach(l=>state.buckets[l]=[]);const fileInput=document.getElementById('files');const files=Array.from(fileInput.files||[]);const paste=document.getElementById('pasteBox').value||'';const seen=new Set();const started=new Date();state.files=files.map(f=>f.name);for(const file of files){try{const text=await file.text();processText(text,file.name,seen);state.inventory.push({name:file.name,size:file.size,status:'PROCESSED',notes:'Loaded through browser file picker'});}catch(e){state.inventory.push({name:file.name,size:file.size,status:'ERROR',notes:String(e.message||e)});}}if(paste.trim()){processText(paste,'PASTE_BOX_INPUT',seen);state.inventory.push({name:'PASTE_BOX_INPUT',size:paste.length,status:'PROCESSED',notes:'Manual pasted text'});}AZ.forEach(l=>state.buckets[l].sort());state.kept=AZ.flatMap(l=>state.buckets[l]);state.log=buildLog(started);render();}
+function processText(text,sourceName,seen){const lines=String(text||'').split(/\r?\n/);state.rawLines+=lines.length;for(let i=0;i<lines.length;i++){const{original,cleaned}=cleanLine(lines[i]);const reviewReason=reasonForReview(original,cleaned);if(reviewReason){state.review.push(`${sourceName}\tLINE ${i+1}\t${reviewReason}\t${original}`);continue;}if(seen.has(cleaned)){state.dup.push(`${sourceName}\tLINE ${i+1}\tDUPLICATE\t${cleaned}`);continue;}seen.add(cleaned);const first=cleaned[0];if(!AZ.includes(first)){state.review.push(`${sourceName}\tLINE ${i+1}\tnon A-Z start\t${original}`);continue;}state.buckets[first].push(cleaned);}}
+function buildMaster(){let out=[];AZ.forEach(l=>{out.push(`===== ${l} =====`);out.push(...state.buckets[l]);out.push('');});return out.join('\n');}
+function buildLog(started){const ended=new Date();return['A_Z_INVENTORY_AND_FEEDER_V1 PROCESS LOG',`Started: ${started.toISOString()}`,`Ended: ${ended.toISOString()}`,`Source files: ${state.files.length}`,`Raw lines: ${state.rawLines}`,`Kept unique lines: ${state.kept.length}`,`Duplicate lines: ${state.dup.length}`,`Review not deleted lines: ${state.review.length}`,'','RULES:','- Uppercase output','- Trim extra spaces','- Keep letters/spaces only in clean output','- Minimum two words','- Exact dedupe only','- Uncertain lines go to REVIEW_NOT_DELETED, not deletion','','FILES:',...state.inventory.map(x=>`${x.name}\t${x.size}\t${x.status}\t${x.notes}`)].join('\n');}
+function buildInventory(){return['SOURCE_INVENTORY_UNVERIFIED','FILE\tSIZE\tSTATUS\tNOTES',...state.inventory.map(x=>`${x.name}\t${x.size}\t${x.status}\t${x.notes}`)].join('\n');}
+function render(){document.getElementById('sFiles').textContent=state.files.length;document.getElementById('sRaw').textContent=state.rawLines;document.getElementById('sKept').textContent=state.kept.length;document.getElementById('sDup').textContent=state.dup.length;document.getElementById('sReview').textContent=state.review.length;document.getElementById('preview').value=buildMaster().slice(0,50000);document.getElementById('letterCounts').innerHTML=AZ.map(l=>`<div class="letter"><b>${l}</b>${state.buckets[l].length}</div>`).join('');document.getElementById('inventoryTable').innerHTML=state.inventory.map(x=>`<tr><td>${escapeHtml(x.name)}</td><td>${x.size}</td><td>${x.status}</td><td>${escapeHtml(x.notes)}</td></tr>`).join('');}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-function download(name, text){
-  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url), 1000);
-}
-function downloadMaster(){download('MASTER_AZ_INDEX.txt', buildMaster());}
-function downloadReview(){download('REVIEW_NOT_DELETED.txt', state.review.join('\n'));}
-function downloadLog(){download('PROCESS_LOG.txt', state.log || buildLog(new Date()));}
-function downloadInventory(){download('00_SOURCE_INVENTORY_UNVERIFIED.txt', buildInventory());}
-function downloadZiplessLetters(){
-  let delay = 0;
-  AZ.forEach(l=>{ setTimeout(()=>download(`${l}.txt`, state.buckets[l].join('\n')), delay); delay += 350; });
-}
-function clearAll(){ document.getElementById('files').value=''; document.getElementById('pasteBox').value=''; state = {files:[], rawLines:0, kept:[], dup:[], review:[], buckets:{}, log:'', inventory:[]}; AZ.forEach(l=>state.buckets[l]=[]); render(); }
-render();
+function download(name,text){const blob=new Blob([text],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function downloadMaster(){download('MASTER_AZ_INDEX.txt',buildMaster());}function downloadReview(){download('REVIEW_NOT_DELETED.txt',state.review.join('\n'));}function downloadLog(){download('PROCESS_LOG.txt',state.log||buildLog(new Date()));}function downloadInventory(){download('00_SOURCE_INVENTORY_UNVERIFIED.txt',buildInventory());}function downloadZiplessLetters(){let delay=0;AZ.forEach(l=>{setTimeout(()=>download(`${l}.txt`,state.buckets[l].join('\n')),delay);delay+=350;});}function clearAll(){document.getElementById('files').value='';document.getElementById('pasteBox').value='';state={files:[],rawLines:0,kept:[],dup:[],review:[],buckets:{},log:'',inventory:[]};AZ.forEach(l=>state.buckets[l]=[]);render();}render();
 </script>
 </body>
 </html>
