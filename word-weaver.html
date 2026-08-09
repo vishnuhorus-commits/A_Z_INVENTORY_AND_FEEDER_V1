@@ -454,7 +454,7 @@
 
 <header>
   <div class="title">WORD WEAVER</div>
-  <div class="subtitle">Linguistic Analysis Engine · 30+ Pattern Types</div>
+  <div class="subtitle">Linguistic Analysis Engine · 30 Named Rhyme Modes + Internal Rhyme · Browser Heuristic Edition</div>
   <div class="stats-bar" id="statsBar">
     <div class="stat-pill">0 Patterns Found</div>
     <div class="stat-pill">0 Words Analyzed</div>
@@ -591,6 +591,75 @@ function getStress(word) {
   return match ? match[0] : '';
 }
 
+function syllableChunks(word) {
+  return word.toLowerCase().match(/[^aeiouy]*[aeiouy]+[^aeiouy]*/g) || [word.toLowerCase()];
+}
+
+function runFinalSyllableRhyme(words) {
+  const unique = [...new Set(words.map(w => w.toLowerCase()))];
+  const groups = new Map();
+  unique.forEach(word => {
+    const chunks = syllableChunks(word);
+    const ending = chunks[chunks.length - 1];
+    if (ending.length < 2) return;
+    if (!groups.has(ending)) groups.set(ending, []);
+    groups.get(ending).push(word);
+  });
+  const results = [];
+  groups.forEach((matches, ending) => {
+    if (matches.length > 1) results.push({words: matches.join(' / '), context: `Final syllable spelling match: ${ending}`});
+  });
+  addResult('Final Syllable Rhyme', 'rhyme', results.slice(0, 80));
+}
+
+function runFemininePararhyme(words) {
+  const unique = [...new Set(words.map(w => w.toLowerCase()))];
+  const results = [];
+  for (let i = 0; i < unique.length; i++) {
+    for (let j = i + 1; j < unique.length; j++) {
+      const a = unique[i], b = unique[j];
+      const ac = syllableChunks(a), bc = syllableChunks(b);
+      if (ac.length < 2 || bc.length < 2) continue;
+      const at = ac.slice(-2).join(''), bt = bc.slice(-2).join('');
+      const consonantsA = getConsonantPattern(at), consonantsB = getConsonantPattern(bt);
+      const vowelsA = getVowelPattern(at), vowelsB = getVowelPattern(bt);
+      if (consonantsA.length >= 2 && consonantsA === consonantsB && vowelsA !== vowelsB) {
+        results.push({words: `${a} / ${b}`, context: 'Two-syllable consonant frame; vowels differ'});
+      }
+    }
+  }
+  addResult('Feminine Pararhyme', 'rhyme', results.slice(0, 60));
+}
+
+function elidedForms(word) {
+  const forms = new Set();
+  const lower = word.toLowerCase();
+  if (lower.endsWith('e') && lower.length > 3) forms.add(lower.slice(0, -1));
+  for (let i = 1; i < lower.length - 1; i++) {
+    if ('aeiou'.includes(lower[i])) forms.add(lower.slice(0, i) + lower.slice(i + 1));
+  }
+  return [...forms];
+}
+
+function runElidedRhyme(words) {
+  const unique = [...new Set(words.map(w => w.toLowerCase()))];
+  const results = [];
+  const used = new Set();
+  for (let i = 0; i < unique.length; i++) {
+    for (let j = i + 1; j < unique.length; j++) {
+      const a = unique[i], b = unique[j], key = `${a}|${b}`;
+      if (used.has(key)) continue;
+      const formsA = elidedForms(a), formsB = elidedForms(b);
+      const match = formsA.some(form => metaphone(form) === metaphone(b)) || formsB.some(form => metaphone(form) === metaphone(a));
+      if (match) {
+        used.add(key);
+        results.push({words: `${a} / ${b}`, context: 'Elided-vowel phonetic candidate'});
+      }
+    }
+  }
+  addResult('Elided Rhyme', 'phonetic', results.slice(0, 60));
+}
+
 // ============================================================
 // MAIN ANALYZER
 // ============================================================
@@ -621,6 +690,7 @@ function analyze() {
     runFullConsonance(words);
     runDoubleConsonance(words);
     runPararhyme(words);
+    runFemininePararhyme(words);
     runRichRhyme(words);
     runLightRhyme(words);
     runWeakenedRhyme(words);
@@ -634,6 +704,8 @@ function analyze() {
     runAmphibaenic(words);
     runApocopated(words);
     runFirstSyllable(words);
+    runFinalSyllableRhyme(words);
+    runElidedRhyme(words);
     runInternalRhyme(sentences);
     runIntelligentRhyme(words);
     runHomophones(words);
